@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- SEU HEAD CONTINUA IGUAL -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PontuAI - Sua Aprovação Guiada por Inteligência Artificial</title>
@@ -9,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* SEU CSS CONTINUA IGUAL */
         :root { --dark-bg: #12121c; --primary-blue: #007BFF; --light-blue: #00AFFF; --accent-purple: #8A2BE2; --white: #FFFFFF; --light-gray: #E0E0E0; --card-bg: #1d1d2b; --border-color: rgba(255, 255, 255, 0.1); --success-green: #4dff91; }
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--dark-bg); color: var(--light-gray); line-height: 1.6; overflow-x: hidden; }
@@ -28,6 +26,8 @@
         .main-nav a:hover, .main-nav a.active { color: var(--primary-blue); }
         .btn-header { background: linear-gradient(90deg, var(--primary-blue), var(--light-blue)); color: var(--white); padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .btn-header:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 123, 255, 0.5); color: var(--white); }
+        .hamburger-menu { display: none; background: none; border: none; cursor: pointer; z-index: 1010; }
+        .hamburger-menu span { display: block; width: 25px; height: 3px; background-color: var(--white); margin: 5px 0; transition: all 0.3s ease-in-out; }
         .hero { padding-top: 180px; padding-bottom: 120px; text-align: center; position: relative; background: linear-gradient(315deg, #1a237e, #12121c, #4a148c); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
         @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
         .hero h1 { font-size: 3.2em; margin-bottom: 20px; line-height: 1.2; }
@@ -115,18 +115,60 @@
         .security-info { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 0.9em; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .security-info svg { stroke: var(--success-green); }
         @media(max-width: 992px) { .pricing-grid { grid-template-columns: 1fr 1fr; } .pricing-card.popular { grid-column: 1 / -1; order: -1; } }
-        @media(max-width: 768px) { .main-header .container { flex-direction: column; gap: 15px; } .hero h1 { font-size: 2.5em; } .problem-solution-grid, .pricing-grid { grid-template-columns: 1fr; } .pricing-card.popular { transform: scale(1); } .checkout-grid { grid-template-columns: 1fr; } .summary-section { grid-row: 1; position: static; margin-bottom: 30px; top: 40px; } }
-        @media(max-width: 576px) { .main-nav ul { flex-direction: column; text-align: center; gap: 15px; } .btn-header { display: none; } .hero h1 { font-size: 2em; } .hero p { font-size: 1em; } }
+        
+        /* === INÍCIO DAS MUDANÇAS PARA O MENU MOBILE === */
+        @media(max-width: 768px) {
+            .hero { padding-top: 120px; /* Reduz o espaçamento para a nova altura do header */ }
+            .hero h1 { font-size: 2.5em; }
+            .problem-solution-grid, .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.popular { transform: scale(1); }
+            .checkout-grid { grid-template-columns: 1fr; }
+            .summary-section { grid-row: 1; position: static; margin-bottom: 30px; top: 40px; }
+            .btn-header { display: none; } /* Esconde o botão "Começar Agora" */
+            .hamburger-menu { display: block; } /* Mostra o menu hambúrguer */
+            
+            .main-nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: rgba(29, 29, 43, 0.98); /* Fundo do menu mobile */
+                backdrop-filter: blur(5px);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease-out;
+            }
+            .main-nav.active {
+                max-height: 500px; /* Altura máxima para mostrar o menu */
+                border-top: 1px solid var(--border-color);
+            }
+            .main-nav ul {
+                flex-direction: column;
+                padding: 20px;
+                text-align: center;
+                gap: 20px;
+            }
+            .main-nav a { font-size: 1.2em; }
+            .main-header .container {
+                /* Remove a regra que causava o problema de empilhamento */
+                /* flex-direction: column; (removido) */
+            }
+        }
+        /* === FIM DAS MUDANÇAS PARA O MENU MOBILE === */
+
+        @media(max-width: 576px) {
+            .hero h1 { font-size: 2em; }
+            .hero p { font-size: 1em; }
+        }
     </style>
 </head>
 <body>
 
     <main id="main-content">
-        <!-- SEÇÕES DA LANDING PAGE ... -->
-         <header class="main-header">
+        <header class="main-header">
             <div class="container">
                 <a href="#" class="logo" id="logo-link">Pontu<span>AI</span></a>
-                <nav class="main-nav">
+                <nav class="main-nav" id="main-nav">
                     <ul>
                         <li><a href="#problem">O Desafio</a></li>
                         <li><a href="#features">Recursos</a></li>
@@ -135,8 +177,16 @@
                     </ul>
                 </nav>
                 <a href="#pricing" class="btn-header">Começar Agora</a>
+                <!-- Botão Hambúrguer -->
+                <button class="hamburger-menu" id="hamburger-menu" aria-label="Abrir menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </header>
+
+        <!-- SEU CONTEÚDO RESTANTE (sections) CONTINUA EXATAMENTE O MESMO -->
         <section class="hero" id="home">
         <div class="container fade-in">
             <h1>A Inteligência Artificial que Garante a sua Aprovação</h1>
@@ -370,143 +420,158 @@
     </footer>
 
     <script>
-        // --- LÓGICA DE NAVEGAÇÃO E PLANOS ---
-        const plans = {
-            'mensal': { name: 'Plano Mensal', price: 25.00, priceFormatted: 'R$ 25,00', description: 'Acesso por 1 mês' },
-            'trimestral': { name: 'Plano Trimestral', price: 60.00, priceFormatted: 'R$ 60,00', description: 'Acesso por 3 meses' },
-            'anual': { name: 'Plano Anual', price: 200.00, priceFormatted: 'R$ 200,00', description: 'Acesso por 12 meses' }
-        };
+        document.addEventListener('DOMContentLoaded', () => {
 
-        const mainContent = document.getElementById('main-content');
-        const checkoutPage = document.getElementById('checkout-page');
-        const logoLink = document.getElementById('logo-link');
-        const pricingButtons = document.querySelectorAll('.btn-price');
-        const navLinks = document.querySelectorAll('.main-nav a, .btn-header, .btn-main');
-        const summaryPlanName = document.getElementById('summary-plan-name');
-        const summaryPlanDesc = document.getElementById('summary-plan-desc');
-        const summaryPlanPrice = document.getElementById('summary-plan-price');
-        const planSwitcher = document.getElementById('plan-switcher');
+            // --- LÓGICA DE NAVEGAÇÃO E PLANOS ---
+            const plans = {
+                'mensal': { name: 'Plano Mensal', price: 25.00, priceFormatted: 'R$ 25,00', description: 'Acesso por 1 mês' },
+                'trimestral': { name: 'Plano Trimestral', price: 60.00, priceFormatted: 'R$ 60,00', description: 'Acesso por 3 meses' },
+                'anual': { name: 'Plano Anual', price: 200.00, priceFormatted: 'R$ 200,00', description: 'Acesso por 12 meses' }
+            };
 
-        function showCheckout(planId) {
-            mainContent.classList.add('hidden');
-            checkoutPage.classList.remove('hidden');
-            updateCheckoutSummary(planId);
-            window.scrollTo(0, 0);
-        }
-        
-        function showMainPage() {
-            mainContent.classList.remove('hidden');
-            checkoutPage.classList.add('hidden');
-        }
-        
-        function updateCheckoutSummary(planId) {
-            const selectedPlan = plans[planId];
-            if (selectedPlan) {
-                summaryPlanName.textContent = selectedPlan.name;
-                summaryPlanDesc.textContent = selectedPlan.description;
-                summaryPlanPrice.textContent = selectedPlan.priceFormatted;
-                planSwitcher.value = planId;
-            }
-        }
-        
-        function populatePlanSwitcher() {
-            planSwitcher.innerHTML = '';
-            for (const planId in plans) {
-                const option = document.createElement('option');
-                option.value = planId;
-                option.textContent = `${plans[planId].name} - ${plans[planId].priceFormatted}`;
-                planSwitcher.appendChild(option);
-            }
-        }
+            const mainContent = document.getElementById('main-content');
+            const checkoutPage = document.getElementById('checkout-page');
+            const logoLink = document.getElementById('logo-link');
+            const pricingButtons = document.querySelectorAll('.btn-price');
+            const navLinks = document.querySelectorAll('.main-nav a, .btn-header, .btn-main');
+            const summaryPlanName = document.getElementById('summary-plan-name');
+            const summaryPlanDesc = document.getElementById('summary-plan-desc');
+            const summaryPlanPrice = document.getElementById('summary-plan-price');
+            const planSwitcher = document.getElementById('plan-switcher');
+            
+            // --- NOVA LÓGICA DO MENU HAMBÚRGUER ---
+            const hamburgerMenu = document.getElementById('hamburger-menu');
+            const mainNav = document.getElementById('main-nav');
 
-        pricingButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                const planId = event.target.dataset.plan;
-                showCheckout(planId);
+            hamburgerMenu.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
             });
-        });
 
-        logoLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            showMainPage();
-            window.history.pushState(null, '', window.location.pathname);
-        });
-        
-        planSwitcher.addEventListener('change', (event) => {
-            updateCheckoutSummary(event.target.value);
-        });
+            function showCheckout(planId) {
+                mainContent.classList.add('hidden');
+                checkoutPage.classList.remove('hidden');
+                updateCheckoutSummary(planId);
+                window.scrollTo(0, 0);
+            }
+            
+            function showMainPage() {
+                mainContent.classList.remove('hidden');
+                checkoutPage.classList.add('hidden');
+            }
+            
+            function updateCheckoutSummary(planId) {
+                const selectedPlan = plans[planId];
+                if (selectedPlan) {
+                    summaryPlanName.textContent = selectedPlan.name;
+                    summaryPlanDesc.textContent = selectedPlan.description;
+                    summaryPlanPrice.textContent = selectedPlan.priceFormatted;
+                    planSwitcher.value = planId;
+                }
+            }
+            
+            function populatePlanSwitcher() {
+                planSwitcher.innerHTML = '';
+                for (const planId in plans) {
+                    const option = document.createElement('option');
+                    option.value = planId;
+                    option.textContent = `${plans[planId].name} - ${plans[planId].priceFormatted}`;
+                    planSwitcher.appendChild(option);
+                }
+            }
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', event => {
-                const targetId = link.getAttribute('href');
-                if (targetId.startsWith('#')) {
-                    event.preventDefault();
-                    if (checkoutPage.classList.contains('hidden')) {
-                         const targetElement = document.querySelector(targetId);
-                         if(targetElement) targetElement.scrollIntoView({ behavior: 'smooth' });
-                    } else {
-                        showMainPage();
-                        setTimeout(() => {
+            pricingButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const planId = event.target.dataset.plan;
+                    showCheckout(planId);
+                });
+            });
+
+            logoLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                showMainPage();
+                window.history.pushState(null, '', window.location.pathname);
+            });
+            
+            planSwitcher.addEventListener('change', (event) => {
+                updateCheckoutSummary(event.target.value);
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', event => {
+                    // Fecha o menu hambúrguer se estiver aberto
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                    }
+
+                    const targetId = link.getAttribute('href');
+                    if (targetId && targetId.startsWith('#')) {
+                        event.preventDefault();
+                        if (checkoutPage.classList.contains('hidden')) {
                             const targetElement = document.querySelector(targetId);
                             if(targetElement) targetElement.scrollIntoView({ behavior: 'smooth' });
-                        }, 100);
+                        } else {
+                            showMainPage();
+                            setTimeout(() => {
+                                const targetElement = document.querySelector(targetId);
+                                if(targetElement) targetElement.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
+                        }
                     }
-                }
+                });
             });
-        });
 
-        populatePlanSwitcher();
+            populatePlanSwitcher();
 
-        // --- Animação de fade-in ao rolar a página ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+            // --- Animação de fade-in ao rolar a página ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+            
+            // --- Funcionalidade do Accordion (FAQ) ---
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    const wasActive = item.classList.contains('active');
+                    faqItems.forEach(i => i.classList.remove('active'));
+                    if (!wasActive) {
+                        item.classList.add('active');
+                    }
+                });
             });
-        }, { threshold: 0.1 });
-        const fadeElements = document.querySelectorAll('.fade-in');
-        fadeElements.forEach(el => observer.observe(el));
-        
-        // --- Funcionalidade do Accordion (FAQ) ---
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            question.addEventListener('click', () => {
-                const wasActive = item.classList.contains('active');
-                faqItems.forEach(i => i.classList.remove('active'));
-                if (!wasActive) {
-                    item.classList.add('active');
+
+            // --- LÓGICA DE REDIRECIONAMENTO PARA WHATSAPP ---
+            const checkoutForm = document.getElementById('checkout-form');
+            
+            checkoutForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const fullName = document.getElementById('fullName').value;
+                const clientEmail = document.getElementById('email').value;
+                const cpf = document.getElementById('cpf').value;
+                const phone = document.getElementById('phone').value;
+                const planId = planSwitcher.value;
+                const selectedPlan = plans[planId];
+
+                if (!fullName || !clientEmail || !cpf || !phone) {
+                    alert('Por favor, preencha todos os seus dados antes de continuar.');
+                    return;
                 }
+
+                const message = `Olá, meu nome é ${fullName}, gostaria de contratar o plano ${selectedPlan.name} no valor de ${selectedPlan.priceFormatted}.\n\nMeu email é: ${clientEmail}\nCPF: ${cpf}\nO número que irei usar com a IA é: ${phone}`;
+                
+                const encodedMessage = encodeURIComponent(message);
+                
+                const whatsappUrl = `https://wa.me/5551999604046?text=${encodedMessage}`;
+                
+                window.open(whatsappUrl, '_blank');
             });
-        });
-
-        // --- LÓGICA DE REDIRECIONAMENTO PARA WHATSAPP ---
-        const checkoutForm = document.getElementById('checkout-form');
-        
-        checkoutForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const fullName = document.getElementById('fullName').value;
-            const clientEmail = document.getElementById('email').value;
-            const cpf = document.getElementById('cpf').value;
-            const phone = document.getElementById('phone').value;
-            const planId = planSwitcher.value;
-            const selectedPlan = plans[planId];
-
-            if (!fullName || !clientEmail || !cpf || !phone) {
-                alert('Por favor, preencha todos os seus dados antes de continuar.');
-                return;
-            }
-
-            const message = `Olá, meu nome é ${fullName}, gostaria de contratar o plano ${selectedPlan.name} no valor de ${selectedPlan.priceFormatted}.\n\nMeu email é: ${clientEmail}\nCPF: ${cpf}\nO número que irei usar com a IA é: ${phone}`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            
-            // **CORREÇÃO FINAL: Usando o número de telefone direto.**
-            const whatsappUrl = `https://wa.me/5551999604046?text=${encodedMessage}`;
-            
-            window.open(whatsappUrl, '_blank');
         });
     </script>
 </body>
